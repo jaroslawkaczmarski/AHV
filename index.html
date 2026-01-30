@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pl" xml:lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Anonimowa Weryfikacja Człowieczeństwa v1.1</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Anonimowa Weryfikacja Człowieczeństwa v1.1</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#anonimowa-weryfikacja-czlowiecznosci"
+id="toc-anonimowa-weryfikacja-czlowiecznosci">Anonimowa Weryfikacja Człowieczeństwa</a>
+<ul>
+<li><a
+href="#system-zachowujacy-prywatnosc-do-weryfikacji-czlowiecznosci-wykorzystujacy-infrastrukture-panstwa-i-instytucji-finansowych"
+id="toc-system-zachowujacy-prywatnosc-do-weryfikacji-czlowiecznosci-wykorzystujacy-infrastrukture-panstwa-i-instytucji-finansowych">System 
+zachowujący prywatność do weryfikacji człowieczeństwa wykorzystujący infrastrukturę państwa i instytucji finansowych</a></li>
+<li><a href="#streszczenie" id="toc-streszczenie">Streszczenie</a></li>
+<li><a href="#wprowadzenie" id="toc-wprowadzenie">1. Wprowadzenie</a>
+<ul>
+<li><a href="#problem" id="toc-problem">1.1 Problem</a></li>
+<li><a href="#konsekwencje" id="toc-konsekwencje">1.2 Konsekwencje</a></li>
+<li><a href="#wymagania-dla-rozwiazania"
+id="toc-wymagania-dla-rozwiazania">1.3 Wymagania dla rozwiązania</a></li>
+</ul></li>
+<li><a href="#tlo-istniejace-rozwiazania"
+id="toc-tlo-istniejace-rozwiazania">2. Tło: Istniejące rozwiązania</a>
+<ul>
+<li><a href="#privacy-pass-cloudflare"
+id="toc-privacy-pass-cloudflare">2.1 Privacy Pass (Cloudflare)</a></li>
+<li><a href="#proof-of-humanity" id="toc-proof-of-humanity">2.2 Proof of
+Humanity</a></li>
+<li><a href="#worldcoin" id="toc-worldcoin">2.3 Worldcoin</a></li>
+<li><a href="#eidas-20-portfel-eudi" id="toc-eidas-20-portfel-eudi">2.4
+eIDAS 2.0 / Portfel EUDI</a></li>
+<li><a href="#podsumowanie-porownania" id="toc-podsumowanie-porownania">2.5
+Podsumowanie porównania</a></li>
+</ul></li>
+</ul>
+</nav>
+
+<h1 id="anonimowa-weryfikacja-czlowiecznosci">Anonimowa Weryfikacja Człowieczeństwa</h1>
+<h2
+id="system-zachowujacy-prywatnosc-do-weryfikacji-czlowiecznosci-wykorzystujacy-infrastrukture-panstwa-i-instytucji-finansowych">System
+zachowujący prywatność do weryfikacji człowieczeństwa wykorzystujący infrastrukturę państwa i instytucji finansowych</h2>
+<p><strong>Wersja:</strong> 1.1<br />
+<strong>Data:</strong> Styczeń 2026<br />
+<strong>Autor:</strong> Jarosław Kaczmarski<br />
+<strong>Kontakt:</strong> jaroslaw.kaczmarski@outlook.com</p>
+<hr />
+<h2 id="streszczenie">Streszczenie</h2>
+<p>Rozprzestrzenienie się generatywnej sztucznej inteligencji sprawiło, że tradycyjne systemy CAPTCHA stały się nieskuteczne jako środek rozróżniania ludzi od zautomatyzowanych agentów. Obecne alternatywy albo naruszają prywatność użytkowników (Proof of Humanity), wymagają specjalistycznego sprzętu (Worldcoin), albo opierają się na słabych źródłach weryfikacji (Privacy Pass).</p>
+
+<p>Ten dokument proponuje <strong>Anonimową Weryfikację Człowieczeństwa (AHV)</strong> — system wykorzystujący istniejącą infrastrukturę rządu i instytucji finansowych do wydawania poświadczeń „ludzkości" zachowujących prywatność. System wykorzystuje dowody zerowej wiedzy, aby potwierdzać jedynie, że użytkownik jest zweryfikowanym człowiekiem, nie ujawniając jego tożsamości. Nowatorski <strong>model weryfikacji progowo-losowej</strong> zapewnia, że konta o dużym wpływie podlegają obowiązkowej weryfikacji, podczas gdy zwykli użytkownicy spotykają się z okazjonalnymi losowymi kontrolami, co czyni farmy botów ekonomicznie nierentownymi bez narzucania nadzoru ogółowi społeczeństwa.</p>
+
+<p>Proponowany system naturalnie integruje się z ramami Europejskiej Tożsamości Cyfrowej (EUDI Wallet) wymaganymi przez eIDAS 2.0, pozycjonując go do szybkiego przyjęcia w całej Unii Europejskiej.</p>
+
+<hr />
+<h2 id="wprowadzenie">1. Wprowadzenie</h2>
+<h3 id="problem">1.1 Problem</h3>
+<p>Przez dwie dekady CAPTCHA (Completely Automated Public Turing test to tell Computers and Humans Apart) służył jako podstawowy mechanizm rozróżniania użytkowników będących ludźmi od automatycznych botów. Jednak postępy w uczeniu maszynowym fundamentalnie podważyły to podejście:</p>
+<ul>
+<li><strong>CAPTCHA z rozpoznawaniem obrazów</strong> są rozwiązywane przez modele widzenia komputerowego z większą dokładnością niż ludzie</li>
+<li><strong>CAPTCHA tekstowe</strong> są trywialnie pokonywane przez systemy OCR</li>
+<li><strong>Analiza behawioralna</strong> może być naśladowana przez wyrafinowane frameworki botów</li>
+<li><strong>CAPTCHA dźwiękowe</strong> upadają przed modelami rozpoznawania mowy</li>
+</ul>
+<p>Pojawienie się dużych modeli językowych (LLM) zdolnych do przejścia testu Turinga wyeliminowało ostatnią niezawodną cyfrową metodę weryfikacji człowieczeństwa. Bot może teraz prowadzić długie rozmowy, pisać przekonujące posty i wykazywać zachowania podobne do ludzkich, nieodróżnialne od prawdziwych użytkowników.</p>
+
+<h3 id="konsekwencje">1.2 Konsekwencje</h3>
+<p>Niemożność weryfikacji człowieczeństwa online ma poważne konsekwencje:</p>
+
+<p><strong>Dezinformacja na skalę:</strong> Farmy botów wzmacniają fałszywe narracje, manipulują opinią publiczną i ingerują w procesy demokratyczne.</p>
+
+<p><strong>Degradacja platform:</strong> Platformy mediów społecznościowych zostają zanieczyszczone syntetycznymi treściami, erodując zaufanie i zaangażowanie użytkowników.</p>
+
+<p><strong>Oszustwa ekonomiczne:</strong> Fałszywe konta umożliwiają manipulację recenzjami, oszustwa kliknięciowe i ataki credential stuffing.</p>
+
+<p><strong>Erozja dyskursu online:</strong> Gdy ludzie nie mogą ufać, że komunikują się z innymi ludźmi, znaczący dialog staje się niemożliwy.</p>
+
+<h3 id="wymagania-dla-rozwiazania">1.3 Wymagania dla rozwiązania</h3>
+<p>Skuteczny system weryfikacji ludzi musi spełniać kilka warunków:</p>
+<ol type="1">
+<li><strong>Silne źródło weryfikacji:</strong> Musi weryfikować rzeczywiste człowieczeństwo, nie tylko umiejętność rozwiązywania zagadek</li>
+<li><strong>Zachowujący prywatność:</strong> Nie może ujawniać tożsamości użytkownika ani umożliwiać śledzenia</li>
+<li><strong>Niemożliwy do powiązania:</strong> Wielokrotne weryfikacje tego samego użytkownika nie mogą być skorelowane</li>
+<li><strong>Skalowalny:</strong> Musi działać dla miliardów użytkowników bez specjalistycznego sprzętu</li>
+<li><strong>Wykorzystuje istniejącą infrastrukturę:</strong> Nie może wymagać od użytkowników przyjmowania nowych urządzeń ani przechodzenia inwazyjnych procedur</li>
+<li><strong>Proporcjonalny:</strong> Nie może nakładać nadmiernego obciążenia na zwykłych użytkowników</li>
+</ol>
+<hr />
+
+<h2 id="tlo-istniejace-rozwiazania">2. Tło: Istniejące rozwiązania</h2>
+<h3 id="privacy-pass-cloudflare">2.1 Privacy Pass (Cloudflare)</h3>
+<p><strong>Mechanizm:</strong> Użytkownicy rozwiązują CAPTCHA raz i otrzymują kryptograficznie zaślepione tokeny. Te tokeny mogą być wykorzystywane do przyszłego dostępu bez rozwiązywania dodatkowych CAPTCHA.</p>
+
+<p><strong>Zalety:</strong><br>- Zachowuje prywatność poprzez ślepe podpisy<br>- Niemożliwe do powiązania wykorzystanie tokenów<br>- Wdrożony na skalę (sieć Cloudflare)</p>
+
+<p><strong>Wady:</strong><br>- Źródłem weryfikacji jest CAPTCHA — teraz pokonywalna przez AI<br>- Nie weryfikuje człowieczeństwa, tylko umiejętność rozwiązywania CAPTCHA<br>- Tokeny mogą być „farmowane" przez boty używając usług rozwiązywania CAPTCHA</p>
+
+<h3 id="proof-of-humanity">2.2 Proof of Humanity</h3>
+<p><strong>Mechanizm:</strong> Użytkownicy rejestrują się poprzez przesłanie nagrania wideo siebie i poręczenie przez istniejących zarejestrowanych użytkowników. Rejestracje są przechowywane w blockchainie Ethereum.</p>
+
+<p><strong>Zalety:</strong><br>- Silna weryfikacja poprzez dowód wideo<br>- Zdecentralizowane zarządzanie<br>- Odporne na ataki Sybil poprzez sieć poręczeń</p>
+
+<p><strong>Wady:</strong><br>- <strong>Nie zachowuje prywatności</strong> — wideo i adres Ethereum są publiczne<br>- Tworzy trwały rekord łączący tożsamość z aktywnością blockchain<br>- Technologia deepfake zagraża integralności weryfikacji wideo<br>- Wymaga wiedzy o kryptowalutach</p>
+
+<h3 id="worldcoin">2.3 Worldcoin</h3>
+<p><strong>Mechanizm:</strong> Użytkownicy skanują swoją tęczówkę za pomocą specjalistycznego urządzenia („Orb"), które generuje unikalny hash biometryczny. Ten hash jest używany do wydania poświadczenia „World ID".</p>
+
+<p><strong>Zalety:</strong><br>- Silna weryfikacja biometryczna<br>- Dowody zerowej wiedzy chronią prywatność po rejestracji<br>- Globalne ambicje</p>
+
+<p><strong>Wady:</strong><br>- <strong>Wymaga specjalistycznego sprzętu</strong> — Orby są rzadkie i geograficznie ograniczone<br>- Zbieranie danych biometrycznych budzi głębokie obawy o prywatność<br>- Scentralizowana kontrola nad wdrażaniem Orb<br>- Kontrowersyjne praktyki dotyczące danych doprowadziły do kontroli regulacyjnej<br>- Użytkownicy muszą zaufać, że surowe dane biometryczne nie są zachowywane</p>
+
+<h3 id="eidas-20-portfel-eudi">2.4 eIDAS 2.0 / Portfel EUDI</h3>
+<p><strong>Mechanizm:</strong> Rozporządzenie UE nakazujące państwom członkowskim dostarczanie cyfrowych portfeli tożsamości zdolnych do przechowywania weryfikowalnych poświadczeń. Portfele wspierają selektywne ujawnianie atrybutów.</p>
+
+<p><strong>Zalety:</strong><br>- Mandat prawny zapewnia przyjęcie (termin: koniec 2026)<br>- Wykorzystuje istniejącą rządową infrastrukturę tożsamości<br>- Zaprojektowany dla prywatności (selektywne ujawnianie)<br>- Standaryzowany w całej UE</p>
+
+<p><strong>Wady:</strong><br>- <strong>Framework ogólnego przeznaczenia</strong> — nie adresuje specjalnie weryfikacji człowieczeństwa<br>- Implementacja różni się między państwami członkowskimi<br>- Nie jest jeszcze w pełni wdrożony</p>
+
+<h3 id="podsumowanie-porownania">2.5 Podsumowanie porównania</h3>
+<p><strong>Privacy Pass:</strong> Anonimowy ale słaba weryfikacja<br />
+<strong>Proof of Humanity:</strong> Silna weryfikacja ale nie anonimowy<br />
+<strong>Worldcoin:</strong> Silny i częściowo anonimowy ale wymaga specjalnego sprzętu<br />
+<strong>eIDAS 2.0:</strong> Silna infrastruktura ale brak przypadku użycia weryfikacji człowieczeństwa</p>
+
+<p><strong>Zidentyfikowana luka:</strong> Żadne istniejące rozwiązanie nie łączy silnej weryfikacji, pełnej anonimowości i opierania się na istniejącej infrastrukturze.</p>
+
+<hr />
+
+<h2 id="proponowane-rozwiazanie-anonimowa-weryfikacja-czlowiecznosci-ahv">3. Proponowane rozwiązanie: Anonimowa Weryfikacja Człowieczeństwa (AHV)</h2>
+<h3 id="koncepcja-podstawowa">3.1 Koncepcja podstawowa</h3>
+<p>Anonimowa Weryfikacja Człowieczeństwa wykorzystuje weryfikację tożsamości już przeprowadzoną przez zaufane instytucje — w szczególności rządowe systemy tożsamości (np. mObywatel w Polsce) i regulowane instytucje finansowe (banki) — do wydawania poświadczeń, które zaświadczają tylko o człowieczeństwie posiadacza.</p>
+
+<p>Kluczową obserwacją jest to, że <strong>te instytucje już zweryfikowały, że ich użytkownicy to prawdziwi ludzie</strong> poprzez procesy Know Your Customer (KYC) wymagane przez prawo. Ta weryfikacja może być ponownie wykorzystana bez ponownego ujawniania podstawowych danych tożsamości.</p>
+
+<h3 id="wlasciwosci-systemu">3.2 Właściwości systemu</h3>
+<p><strong>Co system potwierdza:</strong><br>- Użytkownik posiada ważne poświadczenie od zaufanego wydawcy<br>- Wydawca zweryfikował, że posiadacz poświadczenia to człowiek</p>
+
+<p><strong>Czego system NIE ujawnia:</strong><br>- Który człowiek<br>- Imię, numer ID, adres lub jakiekolwiek dane osobowe<br>- Czy to ten sam człowiek co w poprzedniej weryfikacji<br>- Jakikolwiek identyfikator możliwy do powiązania</p>
+
+<h3 id="model-zaufania">3.3 Model zaufania</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                    HIERARCHIA ZAUFANIA                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  Poziom 1: WYDAWCY (zaufani)                               │
+│  ├── Rządowe systemy tożsamości (mObywatel, itp.)          │
+│  ├── Regulowane instytucje finansowe (banki)               │
+│  └── Wymagania: KYC-zweryfikowane, audytowane, rozliczalne │
+│                                                             │
+│  Poziom 2: BRAMA WERYFIKACYJNA (zaufany pośrednik)         │
+│  └── Waliduje kody, wydaje tokeny krótkotrwałe             │
+│                                                             │
+│  Poziom 3: POSIADACZE (niezaufani do weryfikacji)          │
+│  └── Każdy użytkownik z poświadczeniem od wydawcy Poziomu 1│
+│                                                             │
+│  Poziom 4: WERYFIKATORZY (ufają Poziomom 1 i 2)            │
+│  └── Strony, platformy, usługi żądające dowodu             │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+<p>Weryfikatorzy nie muszą ufać poszczególnym użytkownikom. Ufają wydawcom i bramie weryfikacyjnej.</p>
+
+<hr />
+<h2 id="architektura-techniczna">4. Architektura techniczna</h2>
+<h3 id="komponenty-systemu">4.1 Komponenty systemu</h3>
+<p>System AHV składa się z czterech głównych komponentów:</p>
+<ol type="1">
+<li><strong>Aplikacje Wydawców</strong> (mObywatel, aplikacje bankowe) — generują kody weryfikacyjne</li>
+<li><strong>Brama Weryfikacyjna</strong> — waliduje kody, wydaje tokeny JWT</li>
+<li><strong>Agent Użytkownika</strong> (przeglądarka/aplikacja) — przenosi tokeny na strony docelowe</li>
+<li><strong>Strony Docelowe</strong> — weryfikują tokeny, przyznają dostęp</li>
+</ol>
+
+<h3 id="przeglad-architektury">4.2 Przegląd architektury</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────────┐
+│                        ARCHITEKTURA AHV                             │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┌──────────────┐                      ┌──────────────────────┐    │
+│  │   mObywatel  │                      │  Brama               │    │
+│  │   / App Banku│ ────── kod ───────→  │  Weryfikacyjna       │    │
+│  │              │                      │  (brama.gov.pl)      │    │
+│  └──────────────┘                      └──────────┬───────────┘    │
+│        │                                          │                 │
+│        │ generuje                                 │ waliduje        │
+│        │ kod typu                                 │ z wydawcą       │
+│        │ BLIK                                     │                 │
+│        ▼                                          ▼                 │
+│  ┌──────────────┐                      ┌──────────────────────┐    │
+│  │ Użytkownik   │ ◄────── JWT ─────────│  Zwraca token JWT    │    │
+│  │ (przeglądarka│         token        │  { human: true,      │    │
+│  │              │                      │    age_over_18: true │    │
+│  └──────┬───────┘                      │    exp: 24h }        │    │
+│         │                              └──────────────────────┘    │
+│         │ X-VP-Token: &lt;jwt&gt;                                        │
+│         │                                                          │
+│         ▼                                                          │
+│  ┌──────────────┐                      ┌──────────────────────┐    │
+│  │ Strona       │ ───── weryfikuj ───→ │  Endpoint JWKS       │    │
+│  │ Docelowa     │ ◄──── klucz publ.────│  /.well-known/jwks   │    │
+│  │ (reddit.com) │                      └──────────────────────┘    │
+│  └──────────────┘                                                  │
+│         │                                                          │
+│         ▼                                                          │
+│  ┌──────────────────────────────────────────────────────────────┐ │
+│  │  Strona docelowa weryfikuje podpis JWT lokalnie               │ │
+│  │  → Brak potrzeby wywołania bramy                              │ │
+│  │  → Wie tylko: human=true, age_over_18=true                    │ │
+│  │  → NIE wie: kto, imię, ID, itp.                               │ │
+│  └──────────────────────────────────────────────────────────────┘ │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘</code></pre>
+
+<h3 id="generowanie-kodu-weryfikacyjnego-styl-blik">4.3 Generowanie kodu weryfikacyjnego (styl BLIK)</h3>
+<p>Użytkownicy generują jednorazowy kod weryfikacyjny w swojej zaufanej aplikacji:</p>
+
+<p><strong>Doświadczenie użytkownika:</strong><br>1. Otwórz aplikację mObywatel lub bankową<br>2. Uwierzytelnij się (biometria/PIN)<br>3. Wybierz „Generuj Kod Weryfikacji Człowieczeństwa"<br>4. Otrzymaj 6-cyfrowy kod ważny przez 2 minuty</p>
+
+<p><strong>Właściwości kodu:</strong><br>- 6 cyfr (jak BLIK)<br>- Ważny przez 120 sekund<br>- Jednorazowe użycie<br>- Powiązany z zweryfikowaną tożsamością użytkownika (ale tożsamość nie jest transmitowana)</p>
+
+<h3 id="brama-weryfikacyjna">4.4 Brama weryfikacyjna</h3>
+<p>Brama Weryfikacyjna działa jako zaufany pośrednik:</p>
+
+<p><strong>Odpowiedzialności:</strong><br>- Otrzymuje kody weryfikacyjne od użytkowników<br>- Waliduje kody z instytucją wydającą (bank/mObywatel)<br>- Wydaje tokeny JWT po pomyślnej walidacji<br>- Nie prowadzi logów łączących tokeny z tożsamościami</p>
+
+<p><strong>Endpointy API:</strong></p>
+<pre><code>POST /verify
+Content-Type: application/json
+
+{
+  "code": "123456",
+  "issuer": "mbank.pl",
+  "requested_claims": ["human", "age_over_18"]
+}
+
+Odpowiedź (sukces):
+{
+  "token": "eyJhbGciOiJFUzI1NiIs...",
+  "expires_in": 86400
+}
+
+Odpowiedź (błąd):
+{
+  "error": "invalid_code",
+  "message": "Kod wygasł lub jest nieprawidłowy"
+}</code></pre>
+
+<h3 id="struktura-tokenu-jwt">4.5 Struktura tokenu JWT</h3>
+<p>Brama wydaje standardowe tokeny JWT:</p>
+
+<p><strong>Nagłówek:</strong></p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+  <span class="dt">"alg"</span><span class="fu">:</span> <span class="st">"ES256"</span><span class="fu">,</span>
+  <span class="dt">"typ"</span><span class="fu">:</span> <span class="st">"JWT"</span><span class="fu">,</span>
+  <span class="dt">"kid"</span><span class="fu">:</span> <span class="st">"gateway-key-2026-01"</span>
+<span class="fu">}</span></code></pre></div>
+
+<p><strong>Ładunek:</strong></p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+  <span class="dt">"iss"</span><span class="fu">:</span> <span class="st">"https://brama.gov.pl"</span><span class="fu">,</span>
+  <span class="dt">"iat"</span><span class="fu">:</span> <span class="dv">1706435000</span><span class="fu">,</span>
+  <span class="dt">"exp"</span><span class="fu">:</span> <span class="dv">1706521400</span><span class="fu">,</span>
+  <span class="dt">"jti"</span><span class="fu">:</span> <span class="st">"unique-token-id-xyz"</span><span class="fu">,</span>
+  
+  <span class="dt">"human"</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span>
+  <span class="dt">"age_over_13"</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span>
+  <span class="dt">"age_over_18"</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span>
+  <span class="dt">"age_over_21"</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span>
+  
+  <span class="dt">"verification_level"</span><span class="fu">:</span> <span class="st">"government_kyc"</span><span class="fu">,</span>
+  <span class="dt">"issuer_country"</span><span class="fu">:</span> <span class="st">"PL"</span><span class="fu">,</span>
+  
+  <span class="dt">"session_hash"</span><span class="fu">:</span> <span class="st">"a8f3b2c1d4e5f6..."</span>
+<span class="fu">}</span></code></pre></div>
+
+<p><strong>Kluczowe decyzje projektowe:</strong></p>
+<ol type="1">
+<li><strong>Brak identyfikatora użytkownika</strong> — roszczenie `sub` jest całkowicie pominięte</li>
+<li><strong>Wiek jako progi logiczne</strong> — `age_over_X` zamiast dokładnego wieku (selektywne ujawnianie)</li>
+<li><strong>Powiązanie sesji</strong> — `session_hash` zapobiega przenoszeniu tokenów między urządzeniami</li>
+<li><strong>Unikalny ID tokenu</strong> — `jti` umożliwia odwołanie jeśli potrzebne</li>
+</ol>
+
+<h3 id="walidacja-tokenu-i-odswiezanie">4.8 Ważność tokenu i odświeżanie</h3>
+<p><strong>Rekomendowane czasy życia tokenów:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Przypadek użycia</th>
+<th>Czas życia tokenu</th>
+<th>Uzasadnienie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ogólne przeglądanie</td>
+<td>24 godziny</td>
+<td>Balans bezpieczeństwo/wygoda</td>
+</tr>
+<tr>
+<td>Posty w mediach społecznościowych</td>
+<td>24 godziny</td>
+<td>Rozsądna długość sesji</td>
+</tr>
+<tr>
+<td>Transakcje finansowe</td>
+<td>15 minut</td>
+<td>Wyższe wymagania bezpieczeństwa</td>
+</tr>
+<tr>
+<td>Treści z ograniczeniami wiekowymi</td>
+<td>7 dni</td>
+<td>Mniej wrażliwe</td>
+</tr>
+</tbody>
+</table>
+
+<p><strong>Mechanizm odświeżania:</strong></p>
+<p>Tokeny mogą być odświeżane bez ponownego wprowadzania kodu jeśli:<br>- Oryginalny token jest nadal ważny (nie wygasł)<br>- Hash sesji pasuje (to samo urządzenie)<br>- W oknie odświeżania (np. ostatnie 10% okresu ważności)</p>
+
+<pre><code>POST /refresh
+Authorization: Bearer &lt;current-token&gt;
+
+Odpowiedź:
+{
+  "token": "eyJhbGciOiJFUzI1NiIs...",
+  "expires_in": 86400
+}</code></pre>
+
+<hr />
+<h2 id="model-weryfikacji-progowo-losowej">5. Model weryfikacji: Progowo-losowej</h2>
+<h3 id="innowacja">5.1 Innowacja</h3>
+<p>Zamiast wymagania weryfikacji od każdego użytkownika lub przy każdej akcji, AHV wprowadza <strong>hybrydowy model weryfikacji</strong>, który równoważy bezpieczeństwo z trudnościami użytkownika:</p>
+
+<p><strong>Weryfikacja progowa:</strong> Konta przekraczające określone progi wpływu muszą ukończyć weryfikację.</p>
+
+<p><strong>Weryfikacja losowa:</strong> Wszystkie inne konta mają niewielkie prawdopodobieństwo weryfikacji przy każdej akcji.</p>
+
+<h3 id="wyzwalacze-progowe">5.2 Wyzwalacze progowe</h3>
+<p>Weryfikacja staje się obowiązkowa gdy:</p>
+<ul>
+<li>Liczba obserwujących konto przekracza próg (np. >50 000)</li>
+<li>Wyświetlenia postów/treści przekraczają próg (np. >100 000)</li>
+<li>Konto zostało oflagowane przez systemy trust & safety platformy</li>
+<li>Konto prosi o odznakę „zweryfikowane"</li>
+</ul>
+
+<h3 id="weryfikacja-losowa">5.3 Weryfikacja losowa</h3>
+<p>Dla kont poniżej progów:<br>- Każda kwalifikowana akcja (post, komentarz, udostępnienie) ma prawdopodobieństwo p wywołania weryfikacji<br>- Rekomendowane p = 0,02 (2%)<br>- Platforma może dostosować w oparciu o sygnały ryzyka</p>
+
+<h3 id="dlaczego-to-dziala">5.4 Dlaczego to działa</h3>
+<p><strong>Przeciw farmom botów:</strong></p>
+
+<p>Farma obsługująca 10 000 kont botów będzie miała do czynienia z:<br>- ~200 wyzwaniami weryfikacyjnymi (przy p=0,02)<br>- Każde wyzwanie wymaga unikalnego poświadczenia ludzkiego<br>- Zdobycie 200 ludzkich poświadczeń jest kosztowne/trudne<br>- Model ekonomiczny farmy botów upada</p>
+
+<p><strong>Dla zwykłych użytkowników:</strong></p>
+<ul>
+<li>Przeciętny użytkownik spotka się z weryfikacją raz na ~50 akcji</li>
+<li>Weryfikacja zajmuje sekundy (otwórz aplikację → potwierdź)</li>
+<li>Minimalne trudności, wysokie bezpieczeństwo</li>
+</ul>
+
+<h3 id="model-formalny">5.5 Model formalny</h3>
+<p>Niech:<br>- n = liczba kont botów<br>- p = prawdopodobieństwo losowej weryfikacji<br>- c = koszt zdobycia jednego ludzkiego poświadczenia<br>- v = wartość generowana na konto bota</p>
+
+<p>Farma botów jest opłacalna gdy: n × v > (n × p) × c</p>
+
+<p>Z p = 0,02, c = 100 PLN (konserwatywne szacunki dla poświadczeń z czarnego rynku):<br>- 10 000 botów generujących po 10 PLN wartości = 100 000 PLN przychodu<br>- Oczekiwany koszt weryfikacji = 10 000 × 0,02 × 100 PLN = 20 000 PLN</p>
+
+<p>Rentowność zmniejszona o 20%. Ale co ważniejsze:<br>- Poświadczenia są trudne do zdobycia na skalę<br>- Każda oflagowana weryfikacja trwale spala poświadczenie<br>- Ograniczenia podaży czynią skalowanie niemożliwym</p>
+
+<hr />
+<h2 id="integracja-z-eidas-20">6. Integracja z eIDAS 2.0</h2>
+<h3 id="naturalne-dopasowanie">6.1 Naturalne dopasowanie</h3>
+<p>Rozporządzenie eIDAS 2.0 (Rozporządzenie UE 2024/1183) nakazuje:</p>
+<ul>
+<li>Państwa członkowskie muszą zapewnić portfele EUDI do końca 2026 roku</li>
+<li>Portfele muszą wspierać poświadczenia weryfikowalne</li>
+<li>Poświadczenia muszą wspierać selektywne ujawnianie</li>
+</ul>
+
+<p>AHV jest <strong>naturalnym rozszerzeniem</strong> tej struktury:<br>- Poświadczenie Weryfikacji Człowieczeństwa to jeden typ poświadczenia wśród wielu<br>- Wydawanie wykorzystuje istniejącą rządową weryfikację tożsamości<br>- Używa standardowego formatu W3C Verifiable Credentials<br>- Kompatybilny z architekturą portfela EUDI</p>
+
+<h3 id="proponowany-typ-poswiadczenia">6.2 Proponowany typ poświadczenia</h3>
+<p>Proponujemy dodanie „HumanVerificationCredential" do typów poświadczeń wspieranych przez portfel EUDI:</p>
+
+<pre><code>Typ poświadczenia: HumanVerificationCredential
+Wymagania wydawcy: Rządowy organ tożsamości lub 
+                   regulowana instytucja finansowa
+Atrybuty:
+  - type: "VerifiedHuman" (wymagane)
+  - verificationLevel: "government_kyc" | "bank_kyc" (wymagane)
+  - age_over_13: boolean (opcjonalne)
+  - age_over_18: boolean (opcjonalne)
+  - age_over_21: boolean (opcjonalne)
+  - issuer_country: ISO 3166-1 kod kraju (wymagane)
+</code></pre>
+
+<h3 id="sciezka-implementacji">6.3 Ścieżka implementacji</h3>
+<p><strong>Faza 1: Pilot krajowy (2026)</strong><br>- Implementacja w Polsce z mObywatel<br>- Demonstracja wykonalności<br>- Zbieranie danych o akceptacji użytkowników</p>
+
+<p><strong>Faza 2: Standardyzacja EU (2027)</strong><br>- Propozycja do European Digital Identity Wallet Architecture Reference Framework<br>- Konsultacje z państwami członkowskimi<br>- Piloty w 3-5 krajach</p>
+
+<p><strong>Faza 3: Wdrożenie w całej UE (2028)</strong><br>- Pełna integracja z portfelami EUDI<br>- Wzajemne uznawanie między krajami<br>- Adopcja przez główne platformy</p>
+
+<hr />
+<h2 id="roadmap-implementacji">9. Roadmap implementacji</h2>
+<h3 id="faza-1-proof-of-concept-q1-2026">Faza 1: Proof of Concept (Q1 2026)</h3>
+<ul>
+<li>Budowa demonstracyjnej bramy weryfikacyjnej</li>
+<li>Stworzenie mock wydawcy do testów</li>
+<li>Budowa rozszerzenia przeglądarki do zarządzania tokenami</li>
+<li>Demonstracja przepływu end-to-end</li>
+</ul>
+
+<h3 id="faza-2-pilot-q2-q3-2026">Faza 2: Pilot (Q2-Q3 2026)</h3>
+<ul>
+<li>Partnerstwo z mObywatel dla generowania kodów</li>
+<li>Wdrożenie produkcyjnej bramy</li>
+<li>Partnerstwo z 1-2 polskimi platformami</li>
+<li>Przeprowadzenie testów użytkowników</li>
+</ul>
+
+<h3 id="faza-3-produkcja-q4-2026---q1-2027">Faza 3: Produkcja (Q4 2026 - Q1 2027)</h3>
+<ul>
+<li>Pełna integracja z mObywatel</li>
+<li>Integracja z aplikacjami bankowymi (2-3 banki)</li>
+<li>Wydanie SDK dla platform (JS, Python, Go)</li>
+<li>Publiczny launch w Polsce</li>
+</ul>
+
+<h3 id="faza-4-ekspansja-ue-2027">Faza 4: Ekspansja UE (2027)</h3>
+<ul>
+<li>Standaryzacja poprzez framework portfela EUDI</li>
+<li>Federacja bram wielokrajowych</li>
+<li>Adopcja przez główne platformy (Meta, X, TikTok)</li>
+</ul>
+
+<h3 id="faza-5-globalnie-2028">Faza 5: Globalnie (2028+)</h3>
+<ul>
+<li>Adopcja przez kraje spoza UE</li>
+<li>Umowy o wzajemnym uznawaniu</li>
+<li>Ciągłe ulepszenia oparte na danych wdrożeniowych</li>
+</ul>
+
+<hr />
+<h2 id="podsumowanie">10. Podsumowanie</h2>
+<p>Upadek CAPTCHA jako mechanizmu weryfikacji człowieczeństwa wymaga nowych podejść. Anonimowa Weryfikacja Człowieczeństwa oferuje drogę naprzód, która:</p>
+<ul>
+<li><strong>Wykorzystuje istniejącą infrastrukturę</strong> — mObywatel, aplikacje bankowe już wdrożone</li>
+<li><strong>Zachowuje prywatność</strong> — brak transmisji tożsamości, niemożliwe do powiązania tokeny</li>
+<li><strong>Znajomy UX</strong> — generowanie kodów w stylu BLIK, minimalne trudności</li>
+<li><strong>Standardowa technologia</strong> — JWT, JWKS, nagłówki HTTP</li>
+<li><strong>Zapewnia silną weryfikację</strong> — opartą na KYC rządu/banków</li>
+<li><strong>Balansuje bezpieczeństwo i użyteczność</strong> — model progowy + losowy</li>
+<li><strong>Zgodny z kierunkiem regulacyjnym UE</strong> — kompatybilny z eIDAS 2.0</li>
+</ul>
+
+<p>Okno na działanie to teraz. Gdy możliwości AI nadal się rozwijają, koszt bezczynności rośnie. Zapraszamy do współpracy polityków, technologów i platformy, aby przenieść Anonimową Weryfikację Człowieczeństwa z koncepcji do rzeczywistości.</p>
+
+<hr />
+<h2 id="references">Referencje</h2>
+<ol type="1">
+<li><p>Parlament Europejski i Rada. Rozporządzenie (UE) 2024/1183 ustanawiające Europejską Strukturę Tożsamości Cyfrowej. 2024.</p></li>
+<li><p>W3C. Verifiable Credentials Data Model v1.1. 2022.</p></li>
+<li><p>IETF. RFC 7519 - JSON Web Token (JWT). 2015.</p></li>
+<li><p>IETF. RFC 7517 - JSON Web Key (JWK). 2015.</p></li>
+<li><p>Tessaro, S., & Zhu, C. "Privacy Pass: Bypassing Internet Challenges Anonymously." Proceedings on Privacy Enhancing Technologies. 2018.</p></li>
+<li><p>Proof of Humanity. https://proofofhumanity.id/</p></li>
+<li><p>Worldcoin Foundation. "Humanness in the Age of AI." 2023.</p></li>
+<li><p>Komisja Europejska. Digital Services Act (Rozporządzenie UE 2022/2065). 2022.</p></li>
+<li><p>BBS+ Signatures. https://w3c-ccg.github.io/ldp-bbs2020/</p></li>
+<li><p>System płatności BLIK. https://blik.com/</p></li>
+</ol>
+
+<hr />
+<h2 id="zalacznik-a-slowniczek">Załącznik A: Słowniczek</h2>
+<p><strong>AHV:</strong> Anonimowa Weryfikacja Człowieczeństwa<br />
+<strong>BBS+:</strong> Schemat podpisów Boneh-Boyen-Shacham wspierający selektywne ujawnianie<br />
+<strong>BLIK:</strong> Polski standard płatności mobilnych używający 6-cyfrowych kodów<br />
+<strong>CAPTCHA:</strong> Całkowicie Zautomatyzowany Publiczny Test Turinga do rozróżniania komputerów i ludzi<br />
+<strong>DSA:</strong> Digital Services Act (Akt o Usługach Cyfrowych)<br />
+<strong>eIDAS:</strong> Elektroniczna Identyfikacja, Uwierzytelnianie i Usługi Zaufania<br />
+<strong>EUDI:</strong> Europejska Tożsamość Cyfrowa<br />
+<strong>JWT:</strong> JSON Web Token<br />
+<strong>JWKS:</strong> JSON Web Key Set<br />
+<strong>KYC:</strong> Know Your Customer (Poznaj Swojego Klienta)<br />
+<strong>VP:</strong> Verifiable Presentation (Weryfikowalna Prezentacja)<br />
+<strong>ZK:</strong> Zero-Knowledge (Zerowa Wiedza)</p>
+
+<hr />
+<h2 id="zalacznik-b-referencje-api">Załącznik B: Referencje API</h2>
+<h3 id="endpointy-bramy">Endpointy bramy</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Metoda</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/verify</code></td>
+<td>POST</td>
+<td>Wymiana kodu na token</td>
+</tr>
+<tr>
+<td><code>/refresh</code></td>
+<td>POST</td>
+<td>Odświeżenie istniejącego tokenu</td>
+</tr>
+<tr>
+<td><code>/introspect</code></td>
+<td>POST</td>
+<td>Weryfikacja ważności tokenu</td>
+</tr>
+<tr>
+<td><code>/.well-known/jwks.json</code></td>
+<td>GET</td>
+<td>Klucze publiczne do weryfikacji</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="naglowki-http">Nagłówki HTTP</h3>
+<table>
+<thead>
+<tr>
+<th>Nagłówek</th>
+<th>Użycie</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>X-VP-Token</code></td>
+<td>Przenosi token weryfikacyjny na stronę docelową</td>
+</tr>
+<tr>
+<td><code>X-VP-Required-Claims</code></td>
+<td>Strona określa wymagane roszczenia</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+<p><strong>Dokument ukończony:</strong> Styczeń 2026<br>
+<strong>Autor:</strong> Jarosław Kaczmarski<br>
+<strong>Kontakt:</strong> jaroslaw.kaczmarski@outlook.com<br>
+<strong>Wersja:</strong> 1.1 (tłumaczenie polskie)</p>
+
+</body>
+</html>
+
+</body>
+</html>

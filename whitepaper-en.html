@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Anonymous Human Verification v1.1</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Anonymous Human Verification v1.1</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#anonymous-human-verification"
+id="toc-anonymous-human-verification">Anonymous Human Verification</a>
+<ul>
+<li><a
+href="#a-privacy-preserving-proof-of-humanity-system-leveraging-government-and-financial-institution-infrastructure"
+id="toc-a-privacy-preserving-proof-of-humanity-system-leveraging-government-and-financial-institution-infrastructure">A
+Privacy-Preserving Proof-of-Humanity System Leveraging Government and
+Financial Institution Infrastructure</a></li>
+<li><a href="#abstract" id="toc-abstract">Abstract</a></li>
+<li><a href="#introduction" id="toc-introduction">1. Introduction</a>
+<ul>
+<li><a href="#the-problem" id="toc-the-problem">1.1 The Problem</a></li>
+<li><a href="#the-consequences" id="toc-the-consequences">1.2 The
+Consequences</a></li>
+<li><a href="#requirements-for-a-solution"
+id="toc-requirements-for-a-solution">1.3 Requirements for a
+Solution</a></li>
+</ul></li>
+<li><a href="#background-existing-solutions"
+id="toc-background-existing-solutions">2. Background: Existing
+Solutions</a>
+<ul>
+<li><a href="#privacy-pass-cloudflare"
+id="toc-privacy-pass-cloudflare">2.1 Privacy Pass (Cloudflare)</a></li>
+<li><a href="#proof-of-humanity" id="toc-proof-of-humanity">2.2 Proof of
+Humanity</a></li>
+<li><a href="#worldcoin" id="toc-worldcoin">2.3 Worldcoin</a></li>
+<li><a href="#eidas-2.0-eudi-wallet" id="toc-eidas-2.0-eudi-wallet">2.4
+eIDAS 2.0 / EUDI Wallet</a></li>
+<li><a href="#comparison-summary" id="toc-comparison-summary">2.5
+Comparison Summary</a></li>
+</ul></li>
+<li><a href="#proposed-solution-anonymous-human-verification-ahv"
+id="toc-proposed-solution-anonymous-human-verification-ahv">3. Proposed
+Solution: Anonymous Human Verification (AHV)</a>
+<ul>
+<li><a href="#core-concept" id="toc-core-concept">3.1 Core
+Concept</a></li>
+<li><a href="#system-properties" id="toc-system-properties">3.2 System
+Properties</a></li>
+<li><a href="#trust-model" id="toc-trust-model">3.3 Trust Model</a></li>
+</ul></li>
+<li><a href="#technical-architecture" id="toc-technical-architecture">4.
+Technical Architecture</a>
+<ul>
+<li><a href="#system-components" id="toc-system-components">4.1 System
+Components</a></li>
+<li><a href="#architecture-overview" id="toc-architecture-overview">4.2
+Architecture Overview</a></li>
+<li><a href="#verification-code-generation-blik-style"
+id="toc-verification-code-generation-blik-style">4.3 Verification Code
+Generation (BLIK-style)</a></li>
+<li><a href="#verification-gateway" id="toc-verification-gateway">4.4
+Verification Gateway</a></li>
+<li><a href="#jwt-token-structure" id="toc-jwt-token-structure">4.5 JWT
+Token Structure</a></li>
+<li><a href="#token-transmission" id="toc-token-transmission">4.6 Token
+Transmission</a></li>
+<li><a href="#token-verification-by-target-site"
+id="toc-token-verification-by-target-site">4.7 Token Verification by
+Target Site</a></li>
+<li><a href="#token-validity-and-refresh"
+id="toc-token-validity-and-refresh">4.8 Token Validity and
+Refresh</a></li>
+<li><a href="#introspection-endpoint-optional"
+id="toc-introspection-endpoint-optional">4.9 Introspection Endpoint
+(Optional)</a></li>
+<li><a href="#credential-issuance-long-term"
+id="toc-credential-issuance-long-term">4.10 Credential Issuance
+(Long-term)</a></li>
+<li><a href="#unlinkability-through-bbs-signatures"
+id="toc-unlinkability-through-bbs-signatures">4.11 Unlinkability Through
+BBS+ Signatures</a></li>
+</ul></li>
+<li><a href="#verification-model-threshold-random"
+id="toc-verification-model-threshold-random">5. Verification Model:
+Threshold + Random</a>
+<ul>
+<li><a href="#the-innovation" id="toc-the-innovation">5.1 The
+Innovation</a></li>
+<li><a href="#threshold-triggers" id="toc-threshold-triggers">5.2
+Threshold Triggers</a></li>
+<li><a href="#random-verification" id="toc-random-verification">5.3
+Random Verification</a></li>
+<li><a href="#why-this-works" id="toc-why-this-works">5.4 Why This
+Works</a></li>
+<li><a href="#formal-model" id="toc-formal-model">5.5 Formal
+Model</a></li>
+</ul></li>
+<li><a href="#integration-with-eidas-2.0"
+id="toc-integration-with-eidas-2.0">6. Integration with eIDAS 2.0</a>
+<ul>
+<li><a href="#natural-fit" id="toc-natural-fit">6.1 Natural Fit</a></li>
+<li><a href="#proposed-credential-type"
+id="toc-proposed-credential-type">6.2 Proposed Credential Type</a></li>
+<li><a href="#implementation-path" id="toc-implementation-path">6.3
+Implementation Path</a></li>
+</ul></li>
+<li><a href="#privacy-analysis" id="toc-privacy-analysis">7. Privacy
+Analysis</a>
+<ul>
+<li><a href="#data-minimization" id="toc-data-minimization">7.1 Data
+Minimization</a></li>
+<li><a href="#threat-analysis" id="toc-threat-analysis">7.2 Threat
+Analysis</a></li>
+<li><a href="#gdpr-compliance" id="toc-gdpr-compliance">7.3 GDPR
+Compliance</a></li>
+</ul></li>
+<li><a href="#legal-and-regulatory-considerations"
+id="toc-legal-and-regulatory-considerations">8. Legal and Regulatory
+Considerations</a>
+<ul>
+<li><a href="#alignment-with-digital-services-act-dsa"
+id="toc-alignment-with-digital-services-act-dsa">8.1 Alignment with
+Digital Services Act (DSA)</a></li>
+<li><a href="#potential-regulatory-framework"
+id="toc-potential-regulatory-framework">8.2 Potential Regulatory
+Framework</a></li>
+<li><a href="#intellectual-property-considerations"
+id="toc-intellectual-property-considerations">8.3 Intellectual Property
+Considerations</a></li>
+</ul></li>
+<li><a href="#implementation-roadmap" id="toc-implementation-roadmap">9.
+Implementation Roadmap</a>
+<ul>
+<li><a href="#phase-1-proof-of-concept-q1-2026"
+id="toc-phase-1-proof-of-concept-q1-2026">Phase 1: Proof of Concept (Q1
+2026)</a></li>
+<li><a href="#phase-2-pilot-q2-q3-2026"
+id="toc-phase-2-pilot-q2-q3-2026">Phase 2: Pilot (Q2-Q3 2026)</a></li>
+<li><a href="#phase-3-production-q4-2026---q1-2027"
+id="toc-phase-3-production-q4-2026---q1-2027">Phase 3: Production (Q4
+2026 - Q1 2027)</a></li>
+<li><a href="#phase-4-eu-expansion-2027"
+id="toc-phase-4-eu-expansion-2027">Phase 4: EU Expansion (2027)</a></li>
+<li><a href="#phase-5-global-2028" id="toc-phase-5-global-2028">Phase 5:
+Global (2028+)</a></li>
+</ul></li>
+<li><a href="#conclusion" id="toc-conclusion">10. Conclusion</a></li>
+<li><a href="#references" id="toc-references">References</a></li>
+<li><a href="#appendix-a-glossary" id="toc-appendix-a-glossary">Appendix
+A: Glossary</a></li>
+<li><a href="#appendix-b-api-reference"
+id="toc-appendix-b-api-reference">Appendix B: API Reference</a>
+<ul>
+<li><a href="#gateway-endpoints" id="toc-gateway-endpoints">Gateway
+Endpoints</a></li>
+<li><a href="#http-headers" id="toc-http-headers">HTTP Headers</a></li>
+<li><a href="#jwt-claims" id="toc-jwt-claims">JWT Claims</a></li>
+</ul></li>
+<li><a href="#appendix-c-security-considerations"
+id="toc-appendix-c-security-considerations">Appendix C: Security
+Considerations</a>
+<ul>
+<li><a href="#token-security" id="toc-token-security">Token
+Security</a></li>
+<li><a href="#transport-security" id="toc-transport-security">Transport
+Security</a></li>
+<li><a href="#code-security" id="toc-code-security">Code
+Security</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="anonymous-human-verification">Anonymous Human Verification</h1>
+<h2
+id="a-privacy-preserving-proof-of-humanity-system-leveraging-government-and-financial-institution-infrastructure">A
+Privacy-Preserving Proof-of-Humanity System Leveraging Government and
+Financial Institution Infrastructure</h2>
+<p><strong>Version:</strong> 1.1<br />
+<strong>Date:</strong> January 2026<br />
+<strong>Author:</strong> Jarek<br />
+<strong>Contact:</strong> [do uzupełnienia]</p>
+<hr />
+<h2 id="abstract">Abstract</h2>
+<p>The proliferation of generative AI has rendered traditional CAPTCHA
+systems ineffective as a means of distinguishing humans from automated
+agents. Current alternatives either compromise user privacy (Proof of
+Humanity), require specialized hardware (Worldcoin), or rely on weak
+verification sources (Privacy Pass).</p>
+<p>This paper proposes <strong>Anonymous Human Verification
+(AHV)</strong> — a system that leverages existing government and
+financial institution infrastructure to issue privacy-preserving “human
+credentials.” The system employs zero-knowledge proofs to confirm only
+that a user is a verified human, without revealing their identity. A
+novel <strong>threshold-plus-random verification model</strong> ensures
+that high-influence accounts face mandatory verification while ordinary
+users encounter occasional random checks, making bot farms economically
+unviable without imposing surveillance on the general population.</p>
+<p>The proposed system integrates naturally with the European Digital
+Identity (EUDI) Wallet framework mandated by eIDAS 2.0, positioning it
+for rapid adoption across the European Union.</p>
+<hr />
+<h2 id="introduction">1. Introduction</h2>
+<h3 id="the-problem">1.1 The Problem</h3>
+<p>For two decades, CAPTCHA (Completely Automated Public Turing test to
+tell Computers and Humans Apart) has served as the primary mechanism for
+distinguishing human users from automated bots. However, advances in
+machine learning have fundamentally undermined this approach:</p>
+<ul>
+<li><strong>Image recognition CAPTCHAs</strong> are solved by computer
+vision models with higher accuracy than humans</li>
+<li><strong>Text-based CAPTCHAs</strong> are trivially defeated by OCR
+systems</li>
+<li><strong>Behavioral analysis</strong> can be mimicked by
+sophisticated bot frameworks</li>
+<li><strong>Audio CAPTCHAs</strong> fall to speech recognition
+models</li>
+</ul>
+<p>The emergence of large language models (LLMs) capable of passing the
+Turing test has eliminated the last reliable digital method of verifying
+humanness. A bot can now engage in extended conversations, write
+convincing posts, and exhibit human-like behavior indistinguishable from
+genuine users.</p>
+<h3 id="the-consequences">1.2 The Consequences</h3>
+<p>The inability to verify humanness online has severe consequences:</p>
+<p><strong>Disinformation at scale:</strong> Bot farms amplify false
+narratives, manipulate public opinion, and interfere with democratic
+processes.</p>
+<p><strong>Platform degradation:</strong> Social media platforms become
+polluted with synthetic content, eroding trust and user engagement.</p>
+<p><strong>Economic fraud:</strong> Fake accounts enable review
+manipulation, click fraud, and credential stuffing attacks.</p>
+<p><strong>Erosion of online discourse:</strong> When humans cannot
+trust that they are communicating with other humans, meaningful dialogue
+becomes impossible.</p>
+<h3 id="requirements-for-a-solution">1.3 Requirements for a
+Solution</h3>
+<p>An effective human verification system must satisfy several
+constraints:</p>
+<ol type="1">
+<li><strong>Strong verification source:</strong> Must verify actual
+humanness, not just puzzle-solving ability</li>
+<li><strong>Privacy-preserving:</strong> Must not reveal user identity
+or enable tracking</li>
+<li><strong>Unlinkable:</strong> Multiple verifications by the same user
+must not be correlatable</li>
+<li><strong>Scalable:</strong> Must work for billions of users without
+specialized hardware</li>
+<li><strong>Leverages existing infrastructure:</strong> Must not require
+users to adopt new devices or undergo invasive procedures</li>
+<li><strong>Proportionate:</strong> Must not impose excessive burden on
+ordinary users</li>
+</ol>
+<hr />
+<h2 id="background-existing-solutions">2. Background: Existing
+Solutions</h2>
+<h3 id="privacy-pass-cloudflare">2.1 Privacy Pass (Cloudflare)</h3>
+<p><strong>Mechanism:</strong> Users solve a CAPTCHA once and receive
+cryptographically blinded tokens. These tokens can be redeemed for
+future access without solving additional CAPTCHAs.</p>
+<p><strong>Strengths:</strong> - Privacy-preserving through blind
+signatures - Unlinkable token redemption - Deployed at scale (Cloudflare
+network)</p>
+<p><strong>Weaknesses:</strong> - Verification source is CAPTCHA — now
+defeatable by AI - Does not verify humanness, only CAPTCHA-solving
+ability - Tokens can be farmed by bots using CAPTCHA-solving
+services</p>
+<h3 id="proof-of-humanity">2.2 Proof of Humanity</h3>
+<p><strong>Mechanism:</strong> Users register by submitting a video of
+themselves and being vouched for by existing registered users.
+Registrations are stored on the Ethereum blockchain.</p>
+<p><strong>Strengths:</strong> - Strong verification through video
+evidence - Decentralized governance - Sybil-resistant through vouch
+network</p>
+<p><strong>Weaknesses:</strong> - <strong>Not
+privacy-preserving</strong> — video and Ethereum address are public -
+Creates permanent record linking identity to blockchain activity -
+Deepfake technology threatens video verification integrity - Requires
+cryptocurrency knowledge</p>
+<h3 id="worldcoin">2.3 Worldcoin</h3>
+<p><strong>Mechanism:</strong> Users scan their iris using a specialized
+device (“Orb”) which generates a unique biometric hash. This hash is
+used to issue a “World ID” credential.</p>
+<p><strong>Strengths:</strong> - Strong biometric verification -
+Zero-knowledge proofs protect privacy after enrollment - Global
+ambition</p>
+<p><strong>Weaknesses:</strong> - <strong>Requires specialized
+hardware</strong> — Orbs are scarce and geographically limited -
+Biometric data collection raises profound privacy concerns - Centralized
+control of Orb deployment - Controversial data practices have led to
+regulatory scrutiny - Users must trust that raw biometric data is not
+retained</p>
+<h3 id="eidas-2.0-eudi-wallet">2.4 eIDAS 2.0 / EUDI Wallet</h3>
+<p><strong>Mechanism:</strong> EU regulation mandating member states to
+provide digital identity wallets capable of holding verifiable
+credentials. Wallets support selective disclosure of attributes.</p>
+<p><strong>Strengths:</strong> - Legal mandate ensures adoption
+(deadline: end of 2026) - Leverages existing government identity
+infrastructure - Designed for privacy (selective disclosure) -
+Standardized across EU</p>
+<p><strong>Weaknesses:</strong> - <strong>General-purpose
+framework</strong> — does not specifically address human verification -
+Implementation varies by member state - Not yet fully deployed</p>
+<h3 id="comparison-summary">2.5 Comparison Summary</h3>
+<p><strong>Privacy Pass:</strong> Anonymous but weak verification<br />
+<strong>Proof of Humanity:</strong> Strong verification but not
+anonymous<br />
+<strong>Worldcoin:</strong> Strong and partially anonymous but requires
+special hardware<br />
+<strong>eIDAS 2.0:</strong> Strong infrastructure but lacks human
+verification use case</p>
+<p><strong>Gap identified:</strong> No existing solution combines strong
+verification, full anonymity, and reliance on existing
+infrastructure.</p>
+<hr />
+<h2 id="proposed-solution-anonymous-human-verification-ahv">3. Proposed
+Solution: Anonymous Human Verification (AHV)</h2>
+<h3 id="core-concept">3.1 Core Concept</h3>
+<p>Anonymous Human Verification leverages the identity verification
+already performed by trusted institutions — specifically government
+identity systems (e.g., mObywatel in Poland) and regulated financial
+institutions (banks) — to issue credentials that attest only to the
+holder’s humanness.</p>
+<p>The key insight is that <strong>these institutions have already
+verified that their users are real humans</strong> through Know Your
+Customer (KYC) processes mandated by law. This verification can be
+repurposed without re-exposing the underlying identity data.</p>
+<h3 id="system-properties">3.2 System Properties</h3>
+<p><strong>What the system confirms:</strong> - The user holds a valid
+credential from a trusted issuer - The issuer has verified that the
+credential holder is a human</p>
+<p><strong>What the system does NOT reveal:</strong> - Which human -
+Name, national ID, address, or any personal data - Whether this is the
+same human as in a previous verification - Any linkable identifier</p>
+<h3 id="trust-model">3.3 Trust Model</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                     TRUST HIERARCHY                         │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  Level 1: ISSUERS (trusted)                                │
+│  ├── Government identity systems (mObywatel, etc.)         │
+│  ├── Regulated financial institutions (banks)              │
+│  └── Requirements: KYC-verified, audited, accountable      │
+│                                                             │
+│  Level 2: VERIFICATION GATEWAY (trusted intermediary)      │
+│  └── Validates codes, issues short-lived tokens            │
+│                                                             │
+│  Level 3: HOLDERS (untrusted until verified)               │
+│  └── Any user with a credential from Level 1 issuer        │
+│                                                             │
+│  Level 4: VERIFIERS (rely on Level 1 &amp; 2)                  │
+│  └── Websites, platforms, services requesting proof        │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+<p>Verifiers do not need to trust individual users. They trust the
+issuers and the verification gateway.</p>
+<hr />
+<h2 id="technical-architecture">4. Technical Architecture</h2>
+<h3 id="system-components">4.1 System Components</h3>
+<p>The AHV system consists of four main components:</p>
+<ol type="1">
+<li><strong>Issuer Apps</strong> (mObywatel, banking apps) — generate
+verification codes</li>
+<li><strong>Verification Gateway</strong> — validates codes, issues JWT
+tokens</li>
+<li><strong>User Agent</strong> (browser/app) — carries tokens to target
+sites</li>
+<li><strong>Target Sites</strong> — verify tokens, grant access</li>
+</ol>
+<h3 id="architecture-overview">4.2 Architecture Overview</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────────┐
+│                         AHV ARCHITECTURE                            │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┌──────────────┐                      ┌──────────────────────┐    │
+│  │   mObywatel  │                      │  Verification        │    │
+│  │   / Bank App │ ────── code ───────→ │  Gateway             │    │
+│  │              │                      │  (brama.gov.pl)      │    │
+│  └──────────────┘                      └──────────┬───────────┘    │
+│        │                                          │                 │
+│        │ generates                                │ validates       │
+│        │ BLIK-style                               │ with issuer     │
+│        │ code                                     │                 │
+│        ▼                                          ▼                 │
+│  ┌──────────────┐                      ┌──────────────────────┐    │
+│  │    User      │ ◄────── JWT ─────────│  Returns JWT token   │    │
+│  │   (browser)  │         token        │  { human: true,      │    │
+│  │              │                      │    age_over_18: true │    │
+│  └──────┬───────┘                      │    exp: 24h }        │    │
+│         │                              └──────────────────────┘    │
+│         │ X-VP-Token: &lt;jwt&gt;                                        │
+│         │                                                          │
+│         ▼                                                          │
+│  ┌──────────────┐                      ┌──────────────────────┐    │
+│  │  Target Site │ ───── verify ──────→ │  JWKS endpoint       │    │
+│  │  (reddit.com)│ ◄──── public key ────│  /.well-known/jwks   │    │
+│  │              │                      └──────────────────────┘    │
+│  └──────────────┘                                                  │
+│         │                                                          │
+│         ▼                                                          │
+│  ┌──────────────────────────────────────────────────────────────┐ │
+│  │  Target site verifies JWT signature locally                   │ │
+│  │  → No call to gateway needed                                  │ │
+│  │  → Knows only: human=true, age_over_18=true                   │ │
+│  │  → Does NOT know: who, name, ID, etc.                         │ │
+│  └──────────────────────────────────────────────────────────────┘ │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="verification-code-generation-blik-style">4.3 Verification Code
+Generation (BLIK-style)</h3>
+<p>Users generate a one-time verification code in their trusted app:</p>
+<p><strong>User experience:</strong> 1. Open mObywatel or banking app 2.
+Authenticate (biometric/PIN) 3. Select “Generate Human Verification
+Code” 4. Receive 6-digit code valid for 2 minutes</p>
+<p><strong>Code properties:</strong> - 6 digits (like BLIK) - Valid for
+120 seconds - Single use - Bound to user’s verified identity (but
+identity not transmitted)</p>
+<h3 id="verification-gateway">4.4 Verification Gateway</h3>
+<p>The Verification Gateway acts as a trusted intermediary:</p>
+<p><strong>Responsibilities:</strong> - Receives verification codes from
+users - Validates codes with issuing institution (bank/mObywatel) -
+Issues JWT tokens upon successful validation - Maintains no logs linking
+tokens to identities</p>
+<p><strong>API Endpoints:</strong></p>
+<pre><code>POST /verify
+Content-Type: application/json
+
+{
+  &quot;code&quot;: &quot;123456&quot;,
+  &quot;issuer&quot;: &quot;mbank.pl&quot;,
+  &quot;requested_claims&quot;: [&quot;human&quot;, &quot;age_over_18&quot;]
+}
+
+Response (success):
+{
+  &quot;token&quot;: &quot;eyJhbGciOiJFUzI1NiIs...&quot;,
+  &quot;expires_in&quot;: 86400
+}
+
+Response (failure):
+{
+  &quot;error&quot;: &quot;invalid_code&quot;,
+  &quot;message&quot;: &quot;Code expired or invalid&quot;
+}</code></pre>
+<h3 id="jwt-token-structure">4.5 JWT Token Structure</h3>
+<p>The gateway issues standard JWT tokens:</p>
+<p><strong>Header:</strong></p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;alg&quot;</span><span class="fu">:</span> <span class="st">&quot;ES256&quot;</span><span class="fu">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;typ&quot;</span><span class="fu">:</span> <span class="st">&quot;JWT&quot;</span><span class="fu">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;kid&quot;</span><span class="fu">:</span> <span class="st">&quot;gateway-key-2026-01&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Payload:</strong></p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;iss&quot;</span><span class="fu">:</span> <span class="st">&quot;https://brama.gov.pl&quot;</span><span class="fu">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;iat&quot;</span><span class="fu">:</span> <span class="dv">1706435000</span><span class="fu">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;exp&quot;</span><span class="fu">:</span> <span class="dv">1706521400</span><span class="fu">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;jti&quot;</span><span class="fu">:</span> <span class="st">&quot;unique-token-id-xyz&quot;</span><span class="fu">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;human&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;age_over_13&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;age_over_18&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;age_over_21&quot;</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;verification_level&quot;</span><span class="fu">:</span> <span class="st">&quot;government_kyc&quot;</span><span class="fu">,</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;issuer_country&quot;</span><span class="fu">:</span> <span class="st">&quot;PL&quot;</span><span class="fu">,</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;session_hash&quot;</span><span class="fu">:</span> <span class="st">&quot;a8f3b2c1d4e5f6...&quot;</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Key design decisions:</strong></p>
+<ol type="1">
+<li><strong>No user identifier</strong> — <code>sub</code> claim is
+omitted entirely</li>
+<li><strong>Age as boolean thresholds</strong> — <code>age_over_X</code>
+instead of exact age (selective disclosure)</li>
+<li><strong>Session binding</strong> — <code>session_hash</code>
+prevents token transfer between devices</li>
+<li><strong>Unique token ID</strong> — <code>jti</code> enables
+revocation if needed</li>
+</ol>
+<h3 id="token-transmission">4.6 Token Transmission</h3>
+<p>Tokens are transmitted via HTTP header:</p>
+<pre class="http"><code>GET /protected-resource HTTP/1.1
+Host: reddit.com
+X-VP-Token: eyJhbGciOiJFUzI1NiIs...</code></pre>
+<p><strong>Why <code>X-VP-Token</code> instead of
+<code>Authorization</code>:</strong> - <code>Authorization</code> header
+is typically used for user authentication - AHV is verification, not
+authentication - Avoids conflicts with existing auth systems - Clear
+semantic separation</p>
+<p><strong>Alternative header names:</strong> -
+<code>X-Human-Verification</code> - <code>Sec-Human-Proof</code>
+(follows <code>Sec-</code> convention for security headers)</p>
+<h3 id="token-verification-by-target-site">4.7 Token Verification by
+Target Site</h3>
+<p>Target sites verify tokens <strong>locally</strong> without
+contacting the gateway:</p>
+<p><strong>Step 1: Obtain Gateway’s Public Key</strong></p>
+<pre><code>GET https://brama.gov.pl/.well-known/jwks.json
+
+{
+  &quot;keys&quot;: [{
+    &quot;kty&quot;: &quot;EC&quot;,
+    &quot;crv&quot;: &quot;P-256&quot;,
+    &quot;x&quot;: &quot;f83OJ3D2xF1Bg8vub...&quot;,
+    &quot;y&quot;: &quot;x_FEzRu9m36HLN2tv...&quot;,
+    &quot;kid&quot;: &quot;gateway-key-2026-01&quot;,
+    &quot;use&quot;: &quot;sig&quot;,
+    &quot;alg&quot;: &quot;ES256&quot;
+  }]
+}</code></pre>
+<p>Public keys are cached and refreshed periodically (e.g., daily).</p>
+<p><strong>Step 2: Verify Token</strong></p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jwt <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;jsonwebtoken&#39;</span>)<span class="op">;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jwksClient <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;jwks-rsa&#39;</span>)<span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Initialize JWKS client (cached)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> client <span class="op">=</span> <span class="fu">jwksClient</span>({</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">jwksUri</span><span class="op">:</span> <span class="st">&#39;https://brama.gov.pl/.well-known/jwks.json&#39;</span><span class="op">,</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">cache</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">cacheMaxAge</span><span class="op">:</span> <span class="dv">86400000</span> <span class="co">// 24 hours</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">verifyHumanToken</span>(token) {</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Get signing key</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> decoded <span class="op">=</span> jwt<span class="op">.</span><span class="fu">decode</span>(token<span class="op">,</span> { <span class="dt">complete</span><span class="op">:</span> <span class="kw">true</span> })<span class="op">;</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> key <span class="op">=</span> <span class="cf">await</span> client<span class="op">.</span><span class="fu">getSigningKey</span>(decoded<span class="op">.</span><span class="at">header</span><span class="op">.</span><span class="at">kid</span>)<span class="op">;</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Verify signature and claims</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> payload <span class="op">=</span> jwt<span class="op">.</span><span class="fu">verify</span>(token<span class="op">,</span> key<span class="op">.</span><span class="fu">getPublicKey</span>()<span class="op">,</span> {</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">algorithms</span><span class="op">:</span> [<span class="st">&#39;ES256&#39;</span>]<span class="op">,</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">issuer</span><span class="op">:</span> <span class="st">&#39;https://brama.gov.pl&#39;</span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Check required claims</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>payload<span class="op">.</span><span class="at">human</span>) {</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="st">&#39;Not a verified human&#39;</span>)<span class="op">;</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>    <span class="dt">human</span><span class="op">:</span> payload<span class="op">.</span><span class="at">human</span><span class="op">,</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>    <span class="dt">age_over_18</span><span class="op">:</span> payload<span class="op">.</span><span class="at">age_over_18</span> <span class="op">||</span> <span class="kw">false</span><span class="op">,</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>    <span class="dt">verification_level</span><span class="op">:</span> payload<span class="op">.</span><span class="at">verification_level</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Step 3: Middleware Integration</strong></p>
+<div class="sourceCode" id="cb9"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Express.js middleware</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">requireHumanVerification</span>(req<span class="op">,</span> res<span class="op">,</span> next) {</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> token <span class="op">=</span> req<span class="op">.</span><span class="at">headers</span>[<span class="st">&#39;x-vp-token&#39;</span>]<span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>token) {</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> res<span class="op">.</span><span class="fu">status</span>(<span class="dv">401</span>)<span class="op">.</span><span class="fu">json</span>({ </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">error</span><span class="op">:</span> <span class="st">&#39;verification_required&#39;</span><span class="op">,</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">message</span><span class="op">:</span> <span class="st">&#39;Human verification token required&#39;</span><span class="op">,</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>      <span class="dt">verify_url</span><span class="op">:</span> <span class="st">&#39;https://brama.gov.pl/verify&#39;</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> verification <span class="op">=</span> <span class="cf">await</span> <span class="fu">verifyHumanToken</span>(token)<span class="op">;</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    req<span class="op">.</span><span class="at">humanVerification</span> <span class="op">=</span> verification<span class="op">;</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">next</span>()<span class="op">;</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">catch</span> (err) {</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> res<span class="op">.</span><span class="fu">status</span>(<span class="dv">403</span>)<span class="op">.</span><span class="fu">json</span>({ </span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>      <span class="dt">error</span><span class="op">:</span> <span class="st">&#39;verification_failed&#39;</span><span class="op">,</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>      <span class="dt">message</span><span class="op">:</span> err<span class="op">.</span><span class="at">message</span> </span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="co">// Usage</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">post</span>(<span class="st">&#39;/api/comment&#39;</span><span class="op">,</span> requireHumanVerification<span class="op">,</span> (req<span class="op">,</span> res) <span class="kw">=&gt;</span> {</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  <span class="co">// User is verified human</span></span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  <span class="co">// req.humanVerification.human === true</span></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<h3 id="token-validity-and-refresh">4.8 Token Validity and Refresh</h3>
+<p><strong>Recommended token lifetimes:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Use Case</th>
+<th>Token Lifetime</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>General browsing</td>
+<td>24 hours</td>
+<td>Balance security/convenience</td>
+</tr>
+<tr>
+<td>Social media posting</td>
+<td>24 hours</td>
+<td>Reasonable session length</td>
+</tr>
+<tr>
+<td>Financial transactions</td>
+<td>15 minutes</td>
+<td>Higher security requirement</td>
+</tr>
+<tr>
+<td>Age-restricted content</td>
+<td>7 days</td>
+<td>Less sensitive</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Refresh mechanism:</strong></p>
+<p>Tokens can be refreshed without re-entering code if: - Original token
+is still valid (not expired) - Session hash matches (same device) -
+Within refresh window (e.g., last 10% of validity period)</p>
+<pre><code>POST /refresh
+Authorization: Bearer &lt;current-token&gt;
+
+Response:
+{
+  &quot;token&quot;: &quot;eyJhbGciOiJFUzI1NiIs...&quot;,
+  &quot;expires_in&quot;: 86400
+}</code></pre>
+<h3 id="introspection-endpoint-optional">4.9 Introspection Endpoint
+(Optional)</h3>
+<p>For high-security scenarios, sites can verify tokens with the
+gateway:</p>
+<pre><code>POST https://brama.gov.pl/introspect
+Content-Type: application/x-www-form-urlencoded
+
+token=eyJhbGciOiJFUzI1NiIs...
+
+Response:
+{
+  &quot;active&quot;: true,
+  &quot;human&quot;: true,
+  &quot;age_over_18&quot;: true,
+  &quot;exp&quot;: 1706521400
+}</code></pre>
+<p><strong>When to use introspection:</strong> - Financial transactions
+- Legal document signing - High-value actions - When token revocation
+must be checked</p>
+<p><strong>When local verification is sufficient:</strong> - General
+content access - Social media interactions - Standard web browsing</p>
+<h3 id="credential-issuance-long-term">4.10 Credential Issuance
+(Long-term)</h3>
+<p>For the W3C Verifiable Credentials integration:</p>
+<p><strong>Credential structure:</strong></p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;@context&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;https://www.w3.org/2018/credentials/v1&quot;</span><span class="ot">,</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;https://ahv.eu/credentials/v1&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;VerifiableCredential&quot;</span><span class="ot">,</span> <span class="st">&quot;HumanVerificationCredential&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;issuer&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;id&quot;</span><span class="fu">:</span> <span class="st">&quot;did:web:mobywatel.gov.pl&quot;</span><span class="fu">,</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;mObywatel&quot;</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;issuanceDate&quot;</span><span class="fu">:</span> <span class="st">&quot;2026-01-28T00:00:00Z&quot;</span><span class="fu">,</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;expirationDate&quot;</span><span class="fu">:</span> <span class="st">&quot;2028-01-28T00:00:00Z&quot;</span><span class="fu">,</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;credentialSubject&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;VerifiedHuman&quot;</span><span class="fu">,</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;verificationLevel&quot;</span><span class="fu">:</span> <span class="st">&quot;government_kyc&quot;</span><span class="fu">,</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;age_over_13&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;age_over_18&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;age_over_21&quot;</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;proof&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;BBS+Signature2022&quot;</span><span class="fu">,</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;proofPurpose&quot;</span><span class="fu">:</span> <span class="st">&quot;assertionMethod&quot;</span><span class="fu">,</span></span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;verificationMethod&quot;</span><span class="fu">:</span> <span class="st">&quot;did:web:mobywatel.gov.pl#bbs-key-1&quot;</span><span class="fu">,</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;proofValue&quot;</span><span class="fu">:</span> <span class="st">&quot;...&quot;</span></span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Critical design decision:</strong> The credential contains NO
+user identifier. It attests only to the type (“VerifiedHuman”),
+verification level, and age thresholds.</p>
+<h3 id="unlinkability-through-bbs-signatures">4.11 Unlinkability Through
+BBS+ Signatures</h3>
+<p>For Verifiable Credentials (not JWT), the system uses BBS+
+signatures:</p>
+<p><strong>Selective disclosure:</strong> Reveal only specific
+attributes</p>
+<p><strong>Proof derivation:</strong> Each presentation generates a new,
+unlinkable proof</p>
+<p><strong>Zero-knowledge:</strong> Verifier learns nothing beyond
+disclosed claims</p>
+<p>This means: - Verification on Reddit generates proof_A - Verification
+on Twitter generates proof_B - proof_A and proof_B cannot be linked,
+even by colluding verifiers</p>
+<hr />
+<h2 id="verification-model-threshold-random">5. Verification Model:
+Threshold + Random</h2>
+<h3 id="the-innovation">5.1 The Innovation</h3>
+<p>Rather than requiring verification for every user or every action,
+AHV introduces a <strong>hybrid verification model</strong> that
+balances security against user friction:</p>
+<p><strong>Threshold verification:</strong> Accounts exceeding defined
+influence thresholds must complete verification.</p>
+<p><strong>Random verification:</strong> All other accounts face a small
+probability of verification on any given action.</p>
+<h3 id="threshold-triggers">5.2 Threshold Triggers</h3>
+<p>Verification becomes mandatory when:</p>
+<ul>
+<li>Account followers exceed threshold (e.g., &gt;50,000)</li>
+<li>Post/content views exceed threshold (e.g., &gt;100,000)</li>
+<li>Account is flagged by platform trust &amp; safety systems</li>
+<li>Account requests “verified” badge</li>
+</ul>
+<h3 id="random-verification">5.3 Random Verification</h3>
+<p>For accounts below thresholds: - Each qualifying action (post,
+comment, share) has probability p of triggering verification -
+Recommended p = 0.02 (2%) - Platform may adjust based on risk
+signals</p>
+<h3 id="why-this-works">5.4 Why This Works</h3>
+<p><strong>Against bot farms:</strong></p>
+<p>A farm operating 10,000 bot accounts will face: - ~200 verification
+challenges (at p=0.02) - Each challenge requires a unique human
+credential - Acquiring 200 human credentials is expensive/difficult -
+Economic model of bot farm collapses</p>
+<p><strong>For regular users:</strong></p>
+<ul>
+<li>Average user encounters verification once every ~50 actions</li>
+<li>Verification takes seconds (open app → confirm)</li>
+<li>Minimal friction, high security</li>
+</ul>
+<h3 id="formal-model">5.5 Formal Model</h3>
+<p>Let: - n = number of bot accounts - p = random verification
+probability<br />
+- c = cost of acquiring one human credential - v = value generated per
+bot account</p>
+<p>Bot farm is viable when: n × v &gt; (n × p) × c</p>
+<p>With p = 0.02, c = 100 PLN (conservative estimate for black market
+credential): - 10,000 bots generating 10 PLN value each = 100,000 PLN
+revenue - Expected verification cost = 10,000 × 0.02 × 100 PLN = 20,000
+PLN</p>
+<p>Profitability reduced by 20%. But more importantly: - Credentials are
+hard to obtain at scale - Each flagged verification burns a credential
+permanently - Supply constraints make scaling impossible</p>
+<hr />
+<h2 id="integration-with-eidas-2.0">6. Integration with eIDAS 2.0</h2>
+<h3 id="natural-fit">6.1 Natural Fit</h3>
+<p>The eIDAS 2.0 regulation (Regulation EU 2024/1183) mandates:</p>
+<ul>
+<li>Member states must provide EUDI Wallets by end of 2026</li>
+<li>Wallets must support verifiable credentials</li>
+<li>Credentials must support selective disclosure</li>
+</ul>
+<p>AHV is a <strong>natural extension</strong> of this framework: -
+Human Verification Credential is one credential type among many -
+Issuance leverages existing government identity verification - Uses
+standard W3C Verifiable Credentials format - Compatible with EUDI Wallet
+architecture</p>
+<h3 id="proposed-credential-type">6.2 Proposed Credential Type</h3>
+<p>We propose adding “HumanVerificationCredential” to the EUDI Wallet
+supported credential types:</p>
+<pre><code>Credential Type: HumanVerificationCredential
+Issuer Requirements: Government identity authority or 
+                     regulated financial institution
+Attributes:
+  - type: &quot;VerifiedHuman&quot; (required)
+  - verificationLevel: &quot;government_kyc&quot; | &quot;bank_kyc&quot; (required)
+  - age_over_13, age_over_18, age_over_21 (optional booleans)
+  - issuanceDate (required)
+  - expirationDate (required)
+Validity: 2 years recommended
+Revocation: Via issuer revocation registry</code></pre>
+<h3 id="implementation-path">6.3 Implementation Path</h3>
+<p><strong>Phase 1 (2026):</strong> Pilot with mObywatel in Poland - Add
+code generation to mObywatel app - Deploy Verification Gateway - Partner
+with 2-3 platforms for integration</p>
+<p><strong>Phase 2 (2027):</strong> EU-wide rollout - Standardize JWT
+claims across member states - Banks begin participating as issuers -
+Major platforms adopt verification</p>
+<p><strong>Phase 3 (2028+):</strong> Global expansion - Non-EU countries
+adopt compatible systems - International mutual recognition
+agreements</p>
+<hr />
+<h2 id="privacy-analysis">7. Privacy Analysis</h2>
+<h3 id="data-minimization">7.1 Data Minimization</h3>
+<p>AHV adheres to strict data minimization principles:</p>
+<p><strong>Issuer (Bank/mObywatel) knows:</strong> - User’s identity
+(already known from KYC) - That user generated a verification code -
+Does NOT know which site requested verification</p>
+<p><strong>Gateway knows:</strong> - That a valid code was presented -
+Which issuer validated it - Does NOT know user identity (only code
+validity)</p>
+<p><strong>Target site knows:</strong> - That someone presented a valid
+human token - Age thresholds met (if requested) - Does NOT know user
+identity - Cannot link to previous verifications (with BBS+)</p>
+<p><strong>User controls:</strong> - When to generate codes - Which
+sites receive tokens - Can refuse verification (with consequences
+defined by site)</p>
+<h3 id="threat-analysis">7.2 Threat Analysis</h3>
+<p><strong>Threat: Target site collusion</strong> Mitigation: JWT
+contains no user ID; BBS+ provides unlinkability</p>
+<p><strong>Threat: Gateway tracking</strong> Mitigation: Gateway sees
+only codes, not identities; no logging requirement</p>
+<p><strong>Threat: Token theft</strong> Mitigation: Session binding;
+short expiry; device fingerprint</p>
+<p><strong>Threat: Code interception</strong> Mitigation: 2-minute
+validity; single use; HTTPS only</p>
+<h3 id="gdpr-compliance">7.3 GDPR Compliance</h3>
+<ul>
+<li><strong>Lawful basis:</strong> Consent (user chooses to verify)</li>
+<li><strong>Data minimization:</strong> Only claims transmitted, no
+identity</li>
+<li><strong>Purpose limitation:</strong> Verification only, no secondary
+use</li>
+<li><strong>Storage limitation:</strong> Sites should not store
+verification records</li>
+<li><strong>Right to erasure:</strong> No persistent personal data to
+erase</li>
+</ul>
+<hr />
+<h2 id="legal-and-regulatory-considerations">8. Legal and Regulatory
+Considerations</h2>
+<h3 id="alignment-with-digital-services-act-dsa">8.1 Alignment with
+Digital Services Act (DSA)</h3>
+<p>The DSA requires large platforms to: - Combat illegal content -
+Provide transparency in content moderation - Assess systemic risks
+including disinformation</p>
+<p>AHV supports DSA compliance by: - Reducing bot-driven amplification
+of illegal content - Providing auditable verification of high-influence
+accounts - Addressing systemic risk of coordinated inauthentic
+behavior</p>
+<h3 id="potential-regulatory-framework">8.2 Potential Regulatory
+Framework</h3>
+<p>We propose amendments to DSA or standalone regulation:</p>
+<p><strong>Article X.1:</strong> Platforms designated as Very Large
+Online Platforms (VLOPs) may implement Anonymous Human Verification for
+accounts meeting influence thresholds.</p>
+<p><strong>Article X.2:</strong> Verification must use credentials
+issued by: (a) Member state identity authorities (b) Credit institutions
+regulated under CRD IV</p>
+<p><strong>Article X.3:</strong> Verification must not reveal user
+identity to the platform. Only the fact of successful verification may
+be recorded.</p>
+<p><strong>Article X.4:</strong> Platforms must not discriminate against
+users who cannot verify (e.g., users outside EU), but may apply enhanced
+scrutiny to their content.</p>
+<h3 id="intellectual-property-considerations">8.3 Intellectual Property
+Considerations</h3>
+<p>Elements potentially eligible for patent protection:</p>
+<ol type="1">
+<li><strong>Threshold + random verification model</strong> — novel
+combination not found in prior art</li>
+<li><strong>BLIK-style code generation for human verification</strong> —
+specific UX pattern</li>
+<li><strong>JWT-based anonymous human token</strong> — specific
+technical implementation</li>
+<li><strong>Gateway architecture separating identity from
+verification</strong> — privacy-preserving design</li>
+</ol>
+<p>Recommended: File provisional patent application before public
+disclosure.</p>
+<hr />
+<h2 id="implementation-roadmap">9. Implementation Roadmap</h2>
+<h3 id="phase-1-proof-of-concept-q1-2026">Phase 1: Proof of Concept (Q1
+2026)</h3>
+<ul>
+<li>Develop Verification Gateway reference implementation</li>
+<li>Create mock issuer for testing</li>
+<li>Build browser extension for token management</li>
+<li>Demonstrate end-to-end flow</li>
+</ul>
+<h3 id="phase-2-pilot-q2-q3-2026">Phase 2: Pilot (Q2-Q3 2026)</h3>
+<ul>
+<li>Partner with mObywatel for code generation</li>
+<li>Deploy production Gateway</li>
+<li>Partner with 1-2 Polish platforms</li>
+<li>Conduct user testing</li>
+</ul>
+<h3 id="phase-3-production-q4-2026---q1-2027">Phase 3: Production (Q4
+2026 - Q1 2027)</h3>
+<ul>
+<li>Full mObywatel integration</li>
+<li>Banking app integration (2-3 banks)</li>
+<li>Platform SDK release (JS, Python, Go)</li>
+<li>Public launch in Poland</li>
+</ul>
+<h3 id="phase-4-eu-expansion-2027">Phase 4: EU Expansion (2027)</h3>
+<ul>
+<li>Standardization through EUDI Wallet framework</li>
+<li>Multi-country gateway federation</li>
+<li>Major platform adoption (Meta, X, TikTok)</li>
+</ul>
+<h3 id="phase-5-global-2028">Phase 5: Global (2028+)</h3>
+<ul>
+<li>Non-EU country adoption</li>
+<li>Mutual recognition agreements</li>
+<li>Continuous improvement based on deployment data</li>
+</ul>
+<hr />
+<h2 id="conclusion">10. Conclusion</h2>
+<p>The collapse of CAPTCHA as a human verification mechanism demands new
+approaches. Anonymous Human Verification offers a path forward that:</p>
+<ul>
+<li><strong>Leverages existing infrastructure</strong> — mObywatel,
+banking apps already deployed</li>
+<li><strong>Preserves privacy</strong> — no identity transmitted,
+unlinkable tokens</li>
+<li><strong>Familiar UX</strong> — BLIK-style code generation, minimal
+friction</li>
+<li><strong>Standard technology</strong> — JWT, JWKS, HTTP headers</li>
+<li><strong>Provides strong verification</strong> — based on
+government/bank KYC</li>
+<li><strong>Balances security and usability</strong> — threshold +
+random model</li>
+<li><strong>Aligns with EU regulatory direction</strong> — eIDAS 2.0
+compatible</li>
+</ul>
+<p>The window for action is now. As AI capabilities continue to advance,
+the cost of inaction grows. We invite collaboration from policymakers,
+technologists, and platforms to bring Anonymous Human Verification from
+concept to reality.</p>
+<hr />
+<h2 id="references">References</h2>
+<ol type="1">
+<li><p>European Parliament and Council. Regulation (EU) 2024/1183
+establishing the European Digital Identity Framework. 2024.</p></li>
+<li><p>W3C. Verifiable Credentials Data Model v1.1. 2022.</p></li>
+<li><p>IETF. RFC 7519 - JSON Web Token (JWT). 2015.</p></li>
+<li><p>IETF. RFC 7517 - JSON Web Key (JWK). 2015.</p></li>
+<li><p>Tessaro, S., &amp; Zhu, C. “Privacy Pass: Bypassing Internet
+Challenges Anonymously.” Proceedings on Privacy Enhancing Technologies.
+2018.</p></li>
+<li><p>Proof of Humanity. https://proofofhumanity.id/</p></li>
+<li><p>Worldcoin Foundation. “Humanness in the Age of AI.”
+2023.</p></li>
+<li><p>European Commission. Digital Services Act (Regulation EU
+2022/2065). 2022.</p></li>
+<li><p>BBS+ Signatures. https://w3c-ccg.github.io/ldp-bbs2020/</p></li>
+<li><p>BLIK Payment System. https://blik.com/</p></li>
+</ol>
+<hr />
+<h2 id="appendix-a-glossary">Appendix A: Glossary</h2>
+<p><strong>AHV:</strong> Anonymous Human Verification<br />
+<strong>BBS+:</strong> Boneh-Boyen-Shacham signature scheme supporting
+selective disclosure<br />
+<strong>BLIK:</strong> Polish mobile payment standard using 6-digit
+codes<br />
+<strong>CAPTCHA:</strong> Completely Automated Public Turing test to
+tell Computers and Humans Apart<br />
+<strong>DSA:</strong> Digital Services Act<br />
+<strong>eIDAS:</strong> Electronic Identification, Authentication and
+Trust Services<br />
+<strong>EUDI:</strong> European Digital Identity<br />
+<strong>JWT:</strong> JSON Web Token<br />
+<strong>JWKS:</strong> JSON Web Key Set<br />
+<strong>KYC:</strong> Know Your Customer<br />
+<strong>VP:</strong> Verifiable Presentation<br />
+<strong>ZK:</strong> Zero-Knowledge</p>
+<hr />
+<h2 id="appendix-b-api-reference">Appendix B: API Reference</h2>
+<h3 id="gateway-endpoints">Gateway Endpoints</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/verify</code></td>
+<td>POST</td>
+<td>Exchange code for token</td>
+</tr>
+<tr>
+<td><code>/refresh</code></td>
+<td>POST</td>
+<td>Refresh existing token</td>
+</tr>
+<tr>
+<td><code>/introspect</code></td>
+<td>POST</td>
+<td>Verify token validity</td>
+</tr>
+<tr>
+<td><code>/.well-known/jwks.json</code></td>
+<td>GET</td>
+<td>Public keys for verification</td>
+</tr>
+</tbody>
+</table>
+<h3 id="http-headers">HTTP Headers</h3>
+<table>
+<thead>
+<tr>
+<th>Header</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>X-VP-Token</code></td>
+<td>Carries verification token to target site</td>
+</tr>
+<tr>
+<td><code>X-VP-Required-Claims</code></td>
+<td>Site specifies required claims</td>
+</tr>
+</tbody>
+</table>
+<h3 id="jwt-claims">JWT Claims</h3>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>human</code></td>
+<td>boolean</td>
+<td>User is verified human</td>
+</tr>
+<tr>
+<td><code>age_over_13</code></td>
+<td>boolean</td>
+<td>User is 13 or older</td>
+</tr>
+<tr>
+<td><code>age_over_18</code></td>
+<td>boolean</td>
+<td>User is 18 or older</td>
+</tr>
+<tr>
+<td><code>age_over_21</code></td>
+<td>boolean</td>
+<td>User is 21 or older</td>
+</tr>
+<tr>
+<td><code>verification_level</code></td>
+<td>string</td>
+<td>“government_kyc” or “bank_kyc”</td>
+</tr>
+<tr>
+<td><code>session_hash</code></td>
+<td>string</td>
+<td>Device/session binding</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="appendix-c-security-considerations">Appendix C: Security
+Considerations</h2>
+<h3 id="token-security">Token Security</h3>
+<ul>
+<li>Use ES256 (ECDSA with P-256) for signing</li>
+<li>Minimum 2048-bit RSA if RSA is used</li>
+<li>Rotate signing keys annually</li>
+<li>Publish key rotation schedule in advance</li>
+</ul>
+<h3 id="transport-security">Transport Security</h3>
+<ul>
+<li>HTTPS required for all endpoints</li>
+<li>HSTS headers mandatory</li>
+<li>Certificate pinning recommended for mobile apps</li>
+</ul>
+<h3 id="code-security">Code Security</h3>
+<ul>
+<li>Codes valid maximum 120 seconds</li>
+<li>Single use (marked as used immediately)</li>
+<li>Rate limiting: max 10 codes per hour per user</li>
+<li>Brute force protection: lockout after 5 failures</li>
+</ul>
+<hr />
+<p><em>Document version 1.1 — Updated with detailed technical
+architecture</em></p>
+</body>
+</html>

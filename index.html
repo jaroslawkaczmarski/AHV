@@ -484,14 +484,14 @@ Odpowiedź (błąd):
 <h3 id="struktura-tokenu-jwt">4.5 Struktura tokenu JWT</h3>
 <p>Brama wydaje standardowe tokeny JWT:</p>
 
-<p><strong>Nagłówek:</strong></p>
+<p><strong>Header:</strong></p>
 <div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
   <span class="dt">"alg"</span><span class="fu">:</span> <span class="st">"ES256"</span><span class="fu">,</span>
   <span class="dt">"typ"</span><span class="fu">:</span> <span class="st">"JWT"</span><span class="fu">,</span>
   <span class="dt">"kid"</span><span class="fu">:</span> <span class="st">"gateway-key-2026-01"</span>
 <span class="fu">}</span></code></pre></div>
 
-<p><strong>Ładunek:</strong></p>
+<p><strong>Payload:</strong></p>
 <div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
   <span class="dt">"iss"</span><span class="fu">:</span> <span class="st">"https://brama.gov.pl"</span><span class="fu">,</span>
   <span class="dt">"iat"</span><span class="fu">:</span> <span class="dv">1706435000</span><span class="fu">,</span>
@@ -759,11 +759,11 @@ Atrybuty:
 </tbody>
 </table>
 
-<h3 id="naglowki-http">Nagłówki HTTP</h3>
+<h3 id="naglowki-http">Headers HTTP</h3>
 <table>
 <thead>
 <tr>
-<th>Nagłówek</th>
+<th>Header</th>
 <th>Użycie</th>
 </tr>
 </thead>
@@ -774,7 +774,7 @@ Atrybuty:
 </tr>
 <tr>
 <td><code>X-VP-Required-Claims</code></td>
-<td>Strona określa wymagane roszczenia</td>
+<td>Strona określa wymagane claims</td>
 </tr>
 </tbody>
 </table>
